@@ -12,6 +12,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <build>
+        <finalName>FOO</finalName> <!-- name used in target folder (FOO jar), not in repo (HelloWorld-1.0-SNAPSHOT.jar)-->
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
