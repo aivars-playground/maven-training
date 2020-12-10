@@ -88,12 +88,30 @@
                         <id>generate sources</id>
                         <goals>
                             <!-- which goal to execute... source:jar... or source:test-jar to include test sources -->
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
+                            <goal>test-jar-no-fork</goal>
                         </goals>
                         <!-- by default, this plugin is fired on package... postponing till install...-->
                         <!-- sources are not uploaded though!!! -->
                         <!-- is it a bug? How to generate and upload sources only on install -->
                         <!-- pre install is missing, validate is previous phase, sounds strange to use it -->
+                        <phase>
+                            install
+                        </phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!-- this adds maven-javadoc-plugin-stale-data, what is that> -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                         <phase>
                             install
                         </phase>
