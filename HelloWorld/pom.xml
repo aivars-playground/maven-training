@@ -55,10 +55,12 @@
         <finalName>FOO</finalName> <!-- name used in target folder (FOO jar), not in repo (HelloWorld-1.0-SNAPSHOT.jar)-->
         <plugins>
             <plugin>
+                <!-- using different version of th compiler plugin -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
             </plugin>
+
         </plugins>
     </build>
 </project>
