@@ -8,6 +8,9 @@
 
     <repositories>
         <repository>
+            <!-- snapshots are treated differently than other artifacts -->
+            <!-- in repo snapshots / in dev versions have release numbers / timestamps appended to a filename -->
+            <!-- when downloading a snapshot, the latest version is picked (timestamp discarded, renamed to snapshot  -->
             <id>spring-snapshot</id>
             <name>Spring Maven SNAPSHOT</name>
             <url>https://repo.spring.io/libs-snapshot</url>
@@ -82,12 +85,15 @@
                 <version>3.2.0</version>
                 <executions>
                     <execution>
+                        <id>generate sources</id>
                         <goals>
                             <!-- which goal to execute... source:jar... or source:test-jar to include test sources -->
                             <goal>jar</goal>
                         </goals>
                         <!-- by default, this plugin is fired on package... postponing till install...-->
                         <!-- sources are not uploaded though!!! -->
+                        <!-- is it a bug? How to generate and upload sources only on install -->
+                        <!-- pre install is missing, validate is previous phase, sounds strange to use it -->
                         <phase>
                             install
                         </phase>
