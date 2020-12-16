@@ -30,9 +30,9 @@
             <version>3.11</version>
         </dependency>
         <dependency>
+            <!-- version is not provided here, but in BOM file 'junit-bom' -->
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -51,8 +51,6 @@
             <!-- picks the latest version from https://repo.spring.io/libs-snapshot/org/springframework/spring-core/5.3.3-SNAPSHOT/-->
             <version>5.3.3-SNAPSHOT</version>
         </dependency>
-
-
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -93,6 +91,17 @@
                 <groupId>org.jboss.logging</groupId>
                 <artifactId>jboss-logging</artifactId>
                 <version>3.4.1.Final</version>
+            </dependency>
+
+            <!--version misalignment -->
+            <!-- either libraries are known to work together well, or distributed together i.e multiple spring libs from same release-->
+            <!-- use bom files https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#bill-of-materials-bom-poms-->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.7.0</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!-- this is just a lookup table, no dependencies are added -->
