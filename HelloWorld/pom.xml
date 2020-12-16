@@ -51,6 +51,21 @@
             <!-- picks the latest version from https://repo.spring.io/libs-snapshot/org/springframework/spring-core/5.3.3-SNAPSHOT/-->
             <version>5.3.3-SNAPSHOT</version>
         </dependency>
+
+
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.1-jre</version>
+        </dependency>
+
+<!-- maven would not recognise duplicate classes, enforce-ban-duplicate-classes would help -->
+<!--        <dependency>-->
+<!--            <groupId>com.google.guava</groupId>-->
+<!--            <artifactId>guava-jdk5</artifactId>-->
+<!--            <version>17.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <dependencyManagement>
@@ -189,7 +204,53 @@
                             <goal>enforce</goal>
                         </goals>
                     </execution>
+
+                    <execution>
+                        <!-- class with same qualified name could occur in multiple libraries -->
+                        <!--
+                        this plugin causes
+                        https://github.com/mojohaus/extra-enforcer-rules/issues/29
+                        [WARNING] Could not find org.apache.commons:commons-lang3:jar:3.11:compile at null
+                        [WARNING] Could not find org.hibernate:hibernate-core:jar:5.4.25.Final:compile at null
+                        [WARNING] Could not find org.springframework:spring-core:jar:5.3.3-SNAPSHOT:compile at null
+                        -->
+                        <id>enforce-ban-duplicate-classes</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <banDuplicateClasses>
+                                    <ignoreClasses>
+                                        <!-- example of ignoring one specific class -->
+                                        <ignoreClass>com.xyz.i18n.Messages</ignoreClass>
+
+                                        <!-- example of ignoring with wildcards -->
+                                        <ignoreClass>org.apache.commons.logging.*</ignoreClass>
+                                    </ignoreClasses>
+                                    <scopes>
+                                        <scope>compile</scope>
+                                        <scope>provided</scope>
+                                    </scopes>
+                                    <findAllDuplicates>true</findAllDuplicates>
+                                    <ignoreWhenIdentical>true</ignoreWhenIdentical>
+                                </banDuplicateClasses>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+
                 </executions>
+
+                <dependencies>
+                    <dependency>
+                        <!-- needed for enforce-ban-duplicate-classes -->
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>extra-enforcer-rules</artifactId>
+                        <version>1.2</version>
+                    </dependency>
+                </dependencies>
+
             </plugin>
 
         </plugins>
