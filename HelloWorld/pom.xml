@@ -173,7 +173,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <dependencyConvergence/>
+                                <dependencyConvergence/> <!--there are different rules, i.e. use the latest -->
                             </rules>
                         </configuration>
                         <goals>
