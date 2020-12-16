@@ -79,6 +79,13 @@
                 <artifactId>jboss-logging</artifactId>
                 <version>3.4.1.Final</version>
             </dependency>
+
+            <!-- this is just a lookup table, no dependencies are added -->
+            <dependency>
+                <groupId>abc.cde.efg</groupId>
+                <artifactId>not-a-real-dependency</artifactId>
+                <version>0.0.0</version>
+            </dependency>
         </dependencies>
         <!--
           only if code above is uncommented, there is a different result
