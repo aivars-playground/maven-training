@@ -188,13 +188,14 @@
 
             <plugin>
                 <!-- in most cases use mvn:verify to launch goal associated with this plugin -->
-                <!-- mvn enforcer:enforce does not work... why? -->
+                <!-- mvn enforcer:enforce does not work... why?  -->
+                <!-- https://stackoverflow.com/questions/24827194/maven-enforcer-plugin-missing-or-invalid-rules -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>3.0.0-M3</version>
                 <executions>
                     <execution>
-                        <id>enforce</id>
+                        <id>enforce-version</id>
                         <configuration>
                             <rules>
                                 <dependencyConvergence/> <!--there are different rules, i.e. use the latest -->
