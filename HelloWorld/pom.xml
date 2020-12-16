@@ -39,6 +39,11 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.4.25.Final</version>
+            <!-- this library brings relies on a conflicting transitive dep -->
+            <!-- could exclude it here, and add transitive dependency in dependencies section -->
+            <!-- bad idea, hard to exclude from every dependency, better option - use  maven-enforcer-plugin <dependencyManagement -->
+            <!-- transitive dependency with fixed version would add a background noise in this section -->
+            <!-- <exclusions>....</exclusions> -->
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -47,6 +52,46 @@
             <version>5.3.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <!-- added by maven-enforcer-plugin-->
+        <!-- helps dealing with transitive dependencies -->
+        <!-- as far as I understand - classpath and MVN could use different jars when resolving conflicts !-->
+        <!-- see surviving-dependency-hell-maven -->
+        <!--
+            comment this <dependencyManagement> section out,
+
+            run 'mvn dependency:tree -Dverbose'
+                [INFO] |  +- org.hibernate.common:hibernate-commons-annotations:jar:5.1.2.Final:compile
+                [INFO] |  |  \- (org.jboss.logging:jboss-logging:jar:3.3.2.Final:compile - omitted for conflict with 3.4.1.Final)
+
+            or more specific 'mvn dependency:tree -Dverbose -Dincludes=org.jboss.logging:jboss-logging'
+            [INFO] - maven-dependency-plugin:2.8:tree (default-cli) @ HelloWorld -
+            [INFO] com.example:HelloWorld:jar:1.0-SNAPSHOT
+            [INFO] \- org.hibernate:hibernate-core:jar:5.4.25.Final:compile
+            [INFO]    +- org.jboss.logging:jboss-logging:jar:3.4.1.Final:compile
+            [INFO]    \- org.hibernate.common:hibernate-commons-annotations:jar:5.1.2.Final:compile
+            [INFO]       \- (org.jboss.logging:jboss-logging:jar:3.3.2.Final:compile - omitted for conflict with 3.4.1.Final)
+        -->
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.logging</groupId>
+                <artifactId>jboss-logging</artifactId>
+                <version>3.4.1.Final</version>
+            </dependency>
+        </dependencies>
+        <!--
+          only if code above is uncommented, there is a different result
+          'mvn dependency:tree -Dverbose -Dincludes=org.jboss.logging:jboss-logging'
+          com.example:HelloWorld:jar:1.0-SNAPSHOT
+            [INFO] \- org.hibernate:hibernate-core:jar:5.4.25.Final:compile
+            [INFO]    +- org.jboss.logging:jboss-logging:jar:3.4.1.Final:compile
+            [INFO]    \- org.hibernate.common:hibernate-commons-annotations:jar:5.1.2.Final:compile
+            [INFO]       \- (org.jboss.logging:jboss-logging:jar:3.4.1.Final:compile - version managed from 3.3.2.Final; omitted for duplicate)
+
+          !!!!version managed from 3.3.2.Final!!!
+        -->
+    </dependencyManagement>
 
     <properties>
         <!-- plugin can be configured here, or in plugins/configure section -->
@@ -115,6 +160,25 @@
                         <phase>
                             install
                         </phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <configuration>
+                            <rules>
+                                <dependencyConvergence/>
+                            </rules>
+                        </configuration>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
