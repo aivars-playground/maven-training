@@ -165,6 +165,8 @@
             </plugin>
 
             <plugin>
+                <!-- in most cases use mvn:verify to launch goal associated with this plugin -->
+                <!-- mvn enforcer:enforce does not work... why? -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>3.0.0-M3</version>
